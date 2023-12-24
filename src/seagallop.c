@@ -4,7 +4,7 @@
 #include "trainer_pokemon_sprites.h"
 #include "text_window.h"
 #include "task.h"
-#include "help_system.h"
+
 #include "overworld.h"
 #include "event_data.h"
 #include "field_fadetransition.h"
@@ -174,7 +174,7 @@ static const struct SpriteTemplate sWakeSpriteTemplate = {
 void DoSeagallopFerryScene(void)
 {
     SetVBlankCallback(NULL);
-    HelpSystem_Disable();
+    //HelpSystem_Disable();
     SetMainCallback2(CB2_SetUpSeagallopScene);
 }
 
@@ -297,7 +297,7 @@ static void Task_Seagallop_2(u8 taskId)
     if (BGMusicStopped() && !gPaletteFade.active)
     {
         Task_Seagallop_3();
-        HelpSystem_Enable();
+        //HelpSystem_Enable();
         DestroyTask(taskId);
     }
 }

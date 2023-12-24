@@ -20,7 +20,7 @@
 #include "link.h"
 #include "graphics.h"
 #include "strings.h"
-#include "help_system.h"
+
 #include "reset_save_heap.h"
 #include "constants/battle.h"
 #include "constants/songs.h"
@@ -1484,7 +1484,7 @@ static void CB2_PrintErrorMessage(void)
         {
             if (JOY_NEW(A_BUTTON))
             {
-                HelpSystem_Enable();
+                //HelpSystem_Enable();
                 PlaySE(SE_PIN);
                 gWirelessCommType = 0;
                 sLinkErrorBuffer.disconnected = 0;
@@ -1495,7 +1495,7 @@ static void CB2_PrintErrorMessage(void)
         {
             if (JOY_NEW(A_BUTTON))
             {
-                HelpSystem_Enable();
+                //HelpSystem_Enable();
                 rfu_REQ_stopMode();
                 rfu_waitREQComplete();
                 DoSoftReset();

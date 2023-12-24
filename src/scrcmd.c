@@ -1,5 +1,7 @@
+#include "constants/species.h"
 #include "global.h"
 #include "gflib.h"
+#include "safari_zone.h"
 #include "script.h"
 #include "mystery_event_script.h"
 #include "event_data.h"
@@ -341,37 +343,28 @@ bool8 ScrCmd_setvar(struct ScriptContext * ctx)
 
 bool8 ScrCmd_randomspecies(struct ScriptContext * ctx)
 {
-    u16 dexLimit = VarGet(ScriptReadHalfword(ctx));
-    u16 speciesNum = SPECIES_BULBASAUR;
-    switch(dexLimit)
+    u16 speciesFrom = VarGet(ScriptReadHalfword(ctx));
+    u16 speciesTo = VarGet(ScriptReadHalfword(ctx));
+
+    u16 minSpecies = min(speciesFrom, speciesTo);
+    u16 maxSpecies = max(speciesFrom, speciesTo) + 1;
+
+    u16 range = maxSpecies - minSpecies;
+    if (range == 0 || range >= NUM_SPECIES)
+        range = NUM_SPECIES - 1;
+    
+    u16 speciesNum = Random() % range + minSpecies;
+
+    if (speciesNum == 0)
+        ++speciesNum;
+    else if (speciesNum >= SPECIES_OLD_UNOWN_B && speciesNum <= SPECIES_OLD_UNOWN_Z)
     {
-        default:
-        case 0:
-            speciesNum = Random() % KANTO_SPECIES_END + 1;
-            break;
-        
-        case 1:
-            speciesNum = Random() % SPECIES_CELEBI + 1;
-            break;
-
-        case 2:
-            speciesNum = Random() % SPECIES_CHIMECHO + 1;
-            break;
-
-        case 3: //all
-        {
-            speciesNum = Random() % SPECIES_CHIMECHO + 1;
-            if (speciesNum >= SPECIES_OLD_UNOWN_B && speciesNum <= SPECIES_OLD_UNOWN_Z)
-            {
-                //remap to new
-                u16 unownNum = speciesNum - SPECIES_OLD_UNOWN_B;
-                u16 offsetNum = SPECIES_UNOWN_B + unownNum;
-                speciesNum = offsetNum;
-            }
-        }
-        break;
+        //bump into next dex species
+        speciesNum += (SPECIES_OLD_UNOWN_Z - SPECIES_OLD_UNOWN_B);
     }
-
+    else if(speciesNum > NUM_SPECIES)
+        speciesNum = NUM_SPECIES - 1;
+    
     gSpecialVar_Result = speciesNum;
     return FALSE;
 }

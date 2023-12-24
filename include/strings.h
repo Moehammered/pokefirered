@@ -144,17 +144,11 @@ extern const u8 gTeachyTvText_CatchingScript2[];
 extern const u8 gTeachyTvText_TMsScript2[];
 extern const u8 gTeachyTvText_RegisterScript2[];
 
-// help_system_812B1E0
-extern const u8 gText_HelpSystemControls_A_Next[];
-extern const u8 gText_HelpSystemControls_PickOkEnd[];
-extern const u8 gText_HelpSystemControls_AorBtoCancel[];
-extern const u8 gText_HelpSystemControls_PickOkCancel[];
 
 // help_system
 extern const u8 gString_Bill[];
 extern const u8 gString_Someone[];
 extern const u8 gString_Help[];
-extern const u8 gString_HelpSystem_ClearTo8[];
 
 extern const u8 gText_Var1IsSelected[];
 extern const u8 gOtherText_WhereShouldTheStrVar1BePlaced[];
@@ -631,14 +625,6 @@ extern const u8 gText_MenuOption[];
 extern const u8 gText_MenuExit[];
 extern const u8 gText_MenuRetire[];
 extern const u8 gText_MenuSafariStats[];
-extern const u8 gStartMenuDesc_Pokedex[];
-extern const u8 gStartMenuDesc_Pokemon[];
-extern const u8 gStartMenuDesc_Bag[];
-extern const u8 gStartMenuDesc_Save[];
-extern const u8 gStartMenuDesc_Option[];
-extern const u8 gStartMenuDesc_Exit[];
-extern const u8 gStartMenuDesc_Retire[];
-extern const u8 gStartMenuDesc_Player[];
 extern const u8 gText_SaveError_PleaseExchangeBackupMemory[];
 extern const u8 gText_SavingDontTurnOffThePower2[];
 extern const u8 gSaveStatName_Player[];
@@ -932,7 +918,6 @@ extern const u8 gText_BattleStyleShift[];
 extern const u8 gText_BattleStyleSet[];
 extern const u8 gText_SoundMono[];
 extern const u8 gText_SoundStereo[];
-extern const u8 gText_ButtonTypeHelp[];
 extern const u8 gText_ButtonTypeLR[];
 extern const u8 gText_ButtonTypeLEqualsA[];
 extern const u8 gText_Option[];

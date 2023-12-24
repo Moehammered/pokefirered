@@ -879,7 +879,6 @@ const u8 gText_BattleStyleSet[] = _("SET");
 const u8 gText_SoundMono[] = _("MONO");
 const u8 gText_SoundStereo[] = _("STEREO");
 const u8 gTextJP_Type[] = _("タイプ");
-const u8 gText_ButtonTypeHelp[] = _("HELP");
 const u8 gText_ButtonTypeLEqualsA[] = _("L=A");
 const u8 gText_ButtonTypeLR[] = _("LR");
 const u8 gText_FrameType[] = _("TYPE");
@@ -894,16 +893,6 @@ const u8 gText_SaveFailed[] = _("レポ-トの かきこみに\nしっぱい し
 const u8 gText_NoSaveFileCantSetTime[] = _("レポ-トが ないので\nじかんの せっていは できません!");
 const u8 gText_InGameClockUsable[] = _("ゲ-ムない じかんの しゅうせい システムが\nつかえる ように なりました!");
 const u8 gText_SavingDontTurnOffThePower2[] = _("SAVING…\nDON'T TURN OFF THE POWER.");
-
-// Start menu option descriptions
-const u8 gStartMenuDesc_Pokedex[] = _("A device that records POKéMON secrets\nupon meeting or catching them.");
-const u8 gStartMenuDesc_Pokemon[] = _("Check and organize POKéMON that are\ntraveling with you in your party.");
-const u8 gStartMenuDesc_Bag[] = _("Equipped with pockets for storing items\nyou bought, received, or found.");
-const u8 gStartMenuDesc_Player[] = _("Check your money and other game data.");
-const u8 gStartMenuDesc_Save[] = _("Save your game with a complete record\nof your progress to take a break.");
-const u8 gStartMenuDesc_Option[] = _("Adjust various game settings such as text\nspeed, game rules, etc.");
-const u8 gStartMenuDesc_Exit[] = _("Close this MENU window.");
-const u8 gStartMenuDesc_Retire[] = _("Retire from the SAFARI GAME and return to\nthe registration counter.");
 
 #include "data/text/quest_log.h"
 
@@ -988,7 +977,6 @@ const u8 gText_End[] = _("おしまい");
 const u8 gString_Bill[] = _("BILL");
 const u8 gString_Someone[] = _("SOMEONE");
 const u8 gString_Help[] = _("HELP");
-const u8 gString_HelpSystem_ClearTo8[] = _("{CLEAR_TO 8}");
 const u8 gText_SpacePoints2[] = _(" points");
 const u8 gText_SpaceTimes3[] = _(" time(s)");
 const u8 gText_PkmnJumpRecords[] = _("POKéMON JUMP RECORDS");
@@ -1173,10 +1161,6 @@ const u8 gText_BronzeCard[] = _("BRONZE");
 const u8 gText_CopperCard[] = _("COPPER");
 const u8 gText_SilverCard[] = _("SILVER");
 const u8 gText_GoldCard[] = _("GOLD");
-const u8 gText_HelpSystemControls_A_Next[] = _("{A_BUTTON}NEXT");
-const u8 gText_HelpSystemControls_PickOkEnd[] = _("{DPAD_UPDOWN}PICK {A_BUTTON}OK {B_BUTTON}END");
-const u8 gText_HelpSystemControls_AorBtoCancel[] = _("{A_BUTTON}{B_BUTTON}CANCEL");
-const u8 gText_HelpSystemControls_PickOkCancel[] = _("{DPAD_UPDOWN}PICK {A_BUTTON}OK {B_BUTTON}CANCEL");
 const u8 gEasyChatGroupName_Pokemon[] = _("POKéMON");
 const u8 gEasyChatGroupName_Trainer[] = _("TRAINER");
 const u8 gEasyChatGroupName_Status[] = _("STATUS");

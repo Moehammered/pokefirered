@@ -1166,9 +1166,10 @@
 	.2byte \limit
 	.endm
 
-	.macro randomspecies limit:req
+	.macro randomspecies from:req, to=0
 	.byte 0xd6
-	.2byte \limit
+	.2byte \from
+	.2byte \to
 	.endm
 
 	@ Adds value to the player's money. If adding 'value' money would exceed MAX_MONEY, the player's money is set to MAX_MONEY.

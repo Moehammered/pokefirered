@@ -5,7 +5,7 @@
 #include "blend_palette.h"
 #include "text_window.h"
 #include "menu.h"
-#include "help_system.h"
+
 #include "new_menu_helpers.h"
 #include "event_scripts.h"
 #include "scanline_effect.h"
@@ -720,7 +720,7 @@ static void Task_NewGameScene(u8 taskId)
         ResetSpriteData();
         FreeAllSpritePalettes();
         ResetTempTileDataBuffers();
-        SetHelpContext(HELPCONTEXT_NEW_GAME);
+        //SetHelpContext(HELPCONTEXT_NEW_GAME);
         break;
     case 1:
         sOakSpeechResources = AllocZeroed(sizeof(*sOakSpeechResources));

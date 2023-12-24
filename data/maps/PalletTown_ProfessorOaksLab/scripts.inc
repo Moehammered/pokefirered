@@ -13,6 +13,7 @@
 .equ RANDOM_SPECIES_ONE_ID,        VAR_TEMP_6
 .equ RANDOM_SPECIES_TWO_ID,        VAR_TEMP_7
 .equ RANDOM_SPECIES_THREE_ID,        VAR_TEMP_8
+.equ MIN_SPECIES_NUM, SPECIES_BULBASAUR
 .equ MAX_SPECIES_NUM, NUM_SPECIES - 1
 
 .equ SHOWED_OAK_COMPLETE_DEX, FLAG_TEMP_2
@@ -24,11 +25,11 @@ PalletTown_ProfessorOaksLab_MapScripts::
 	.byte 0
 
 PalletTown_ProfessorOaksLab_EventScript_RandomiseStarters::
-	randomspecies 3
+	randomspecies MIN_SPECIES_NUM, MAX_SPECIES_NUM
 	copyvar RANDOM_SPECIES_ONE_ID, VAR_RESULT
-	randomspecies 3
+	randomspecies MIN_SPECIES_NUM, MAX_SPECIES_NUM
 	copyvar RANDOM_SPECIES_TWO_ID, VAR_RESULT
-	randomspecies 3
+	randomspecies MIN_SPECIES_NUM, MAX_SPECIES_NUM
 	copyvar RANDOM_SPECIES_THREE_ID, VAR_RESULT
 	return
 
@@ -1113,18 +1114,21 @@ PalletTown_ProfessorOaksLab_EventScript_ConfirmStarterChoice::
 	end
 
 PalletTown_ProfessorOaksLab_EventScript_ConfirmBulbasaur::
+	bufferspeciesname STR_VAR_1, RANDOM_SPECIES_ONE_ID
 	msgbox PalletTown_ProfessorOaksLab_Text_OakChoosingBulbasaur, MSGBOX_YESNO
 	goto_if_eq VAR_RESULT, YES, PalletTown_ProfessorOaksLab_EventScript_ChoseStarter
 	goto_if_eq VAR_RESULT, NO, PalletTown_ProfessorOaksLab_EventScript_DeclinedStarter
 	end
 
 PalletTown_ProfessorOaksLab_EventScript_ConfirmSquirtle::
+	bufferspeciesname STR_VAR_1, RANDOM_SPECIES_TWO_ID
 	msgbox PalletTown_ProfessorOaksLab_Text_OakChoosingSquirtle, MSGBOX_YESNO
 	goto_if_eq VAR_RESULT, YES, PalletTown_ProfessorOaksLab_EventScript_ChoseStarter
 	goto_if_eq VAR_RESULT, NO, PalletTown_ProfessorOaksLab_EventScript_DeclinedStarter
 	end
 
 PalletTown_ProfessorOaksLab_EventScript_ConfirmCharmander::
+	bufferspeciesname STR_VAR_1, RANDOM_SPECIES_THREE_ID
 	msgbox PalletTown_ProfessorOaksLab_Text_OakChoosingCharmander, MSGBOX_YESNO
 	goto_if_eq VAR_RESULT, YES, PalletTown_ProfessorOaksLab_EventScript_ChoseStarter
 	goto_if_eq VAR_RESULT, NO, PalletTown_ProfessorOaksLab_EventScript_DeclinedStarter
