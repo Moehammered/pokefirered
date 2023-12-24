@@ -339,6 +339,52 @@ bool8 ScrCmd_setvar(struct ScriptContext * ctx)
     return FALSE;
 }
 
+bool8 ScrCmd_randomspecies(struct ScriptContext * ctx)
+{
+    u16 dexLimit = VarGet(ScriptReadHalfword(ctx));
+    u16 speciesNum = SPECIES_BULBASAUR;
+    switch(dexLimit)
+    {
+        default:
+        case 0:
+            speciesNum = Random() % KANTO_SPECIES_END + 1;
+            break;
+        
+        case 1:
+            speciesNum = Random() % SPECIES_CELEBI + 1;
+            break;
+
+        case 2:
+            speciesNum = Random() % SPECIES_CHIMECHO + 1;
+            break;
+
+        case 3: //all
+        {
+            speciesNum = Random() % SPECIES_CHIMECHO + 1;
+            if (speciesNum >= SPECIES_OLD_UNOWN_B && speciesNum <= SPECIES_OLD_UNOWN_Z)
+            {
+                //remap to new
+                u16 unownNum = speciesNum - SPECIES_OLD_UNOWN_B;
+                u16 offsetNum = SPECIES_UNOWN_B + unownNum;
+                speciesNum = offsetNum;
+            }
+        }
+        break;
+    }
+
+    gSpecialVar_Result = speciesNum;
+    return FALSE;
+}
+
+
+bool8 ScrCmd_randombyte()
+{
+    u16 max_val = gSpecialVar_0x8005;
+    u16 randomVal = 255 % max_val;
+    gSpecialVar_0x8005 = randomVal;
+    return FALSE;
+}
+
 bool8 ScrCmd_copyvar(struct ScriptContext * ctx)
 {
     u16 * destPtr = GetVarPointer(ScriptReadHalfword(ctx));

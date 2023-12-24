@@ -61,3 +61,6 @@ prefabs.json
 .vscode/*.*
 *.js
 *.sym
+.cache
+.clangd
+compile_commands.json

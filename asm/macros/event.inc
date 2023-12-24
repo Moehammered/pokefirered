@@ -170,6 +170,11 @@
 	.2byte \value
 	.endm
 
+	.macro randombyte max:req, destination:req
+	setorcopyvar VAR_0x8005, \max
+	specialvar VAR_RESULT, randombyte
+	.endm
+
 	@ Copies the value of source into destination.
 	.macro copyvar destination:req, source:req
 	.byte 0x19
@@ -1158,6 +1163,11 @@
 	@ Stores a random integer between 0 and limit (exclusive of limit) in VAR_RESULT.
 	.macro random limit:req
 	.byte 0x8f
+	.2byte \limit
+	.endm
+
+	.macro randomspecies limit:req
+	.byte 0xd6
 	.2byte \limit
 	.endm
 

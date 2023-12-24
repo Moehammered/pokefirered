@@ -53,11 +53,11 @@ GCC_VER = $(shell $(CC) -dumpversion)
 
 ifeq ($(MODERN),0)
 CC1             := tools/agbcc/bin/agbcc$(EXE)
-override CFLAGS += -mthumb-interwork -Wimplicit -Wparentheses -Werror -O2 -fhex-asm
+override CFLAGS += -mthumb-interwork -Wimplicit -Wparentheses -Werror -O0 -fhex-asm
 LIBPATH := -L ../../tools/agbcc/lib
 else
 CC1             := $(shell $(MODERNCC) --print-prog-name=cc1) -quiet
-override CFLAGS += -mthumb -mthumb-interwork -O2 -mcpu=arm7tdmi -mabi=apcs-gnu -fno-toplevel-reorder -fno-aggressive-loop-optimizations -Wno-pointer-to-int-cast
+override CFLAGS += -mthumb -mthumb-interwork -O0 -mcpu=arm7tdmi -mabi=apcs-gnu -fno-toplevel-reorder -fno-aggressive-loop-optimizations -Wno-pointer-to-int-cast
 LIBPATH := -L $(shell dirname $(shell $(MODERNCC) --print-file-name=libgcc.a)) -L $(shell dirname $(shell $(MODERNCC) --print-file-name=libc.a))
 endif
 
@@ -271,6 +271,11 @@ ifeq ($(DINFO),1)
 override CFLAGS += -g
 endif
 
+ifeq ($(DDEBUGGING),1)
+override ASFLAGS += --defsym DEBUGGING=1
+override CPPFLAGS += -D DEBUGGING=1
+endif
+
 $(C_BUILDDIR)/%.o : $(C_SUBDIR)/%.c $$(c_dep)
 	@$(CPP) $(CPPFLAGS) $< -o $(C_BUILDDIR)/$*.i
 	@$(PREPROC) $(C_BUILDDIR)/$*.i charmap.txt | $(CC1) $(CFLAGS) -o $(C_BUILDDIR)/$*.s
@@ -343,7 +348,7 @@ $(ROM): $(ELF)
 
 # "friendly" target names for convenience sake
 firered:                ; @$(MAKE) GAME_VERSION=FIRERED
-firered_rev1:           ; @$(MAKE) GAME_VERSION=FIRERED GAME_REVISION=1
+firered_rev1:           ; @$(MAKE) GAME_VERSION=FIRERED GAME_REVISIONelf=1
 leafgreen:              ; @$(MAKE) GAME_VERSION=LEAFGREEN
 leafgreen_rev1:         ; @$(MAKE) GAME_VERSION=LEAFGREEN GAME_REVISION=1
 

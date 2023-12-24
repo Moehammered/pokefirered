@@ -3,6 +3,7 @@
 #include "bike.h"
 #include "coord_event_weather.h"
 #include "daycare.h"
+#include "debug.h"
 #include "event_data.h"
 #include "event_object_movement.h"
 #include "event_scripts.h"
@@ -86,7 +87,7 @@ void FieldClearPlayerInput(struct FieldInput *input)
     input->pressedRButton = FALSE;
     input->input_field_1_0 = FALSE;
     input->input_field_1_1 = FALSE;
-    input->input_field_1_2 = FALSE;
+    input->openedDebugMenu = FALSE;
     input->input_field_1_3 = FALSE;
     input->dpadDirection = 0;
 }
@@ -153,6 +154,15 @@ void FieldGetPlayerInput(struct FieldInput *input, u16 newKeys, u16 heldKeys)
         else if (heldKeys & DPAD_RIGHT)
             input->dpadDirection = DIR_EAST;
     }
+
+#if DEBUGGING
+    bool8 pressedDebugCombo = (heldKeys & R_BUTTON) && input->pressedStartButton;
+    if (pressedDebugCombo)
+    {
+        input->pressedStartButton = FALSE;
+        input->openedDebugMenu = TRUE;
+    }
+#endif
 }
 
 static void QuestLogOverrideJoyVars(struct FieldInput *input, u16 *newKeys, u16 *heldKeys)
@@ -294,6 +304,15 @@ int ProcessPlayerFieldInput(struct FieldInput *input)
         gFieldInputRecord.pressedSelectButton = TRUE;
         return TRUE;
     }
+
+#if DEBUGGING
+    if(input->openedDebugMenu)
+    {
+        PlaySE(SE_WIN_OPEN);
+        Debug_ShowMainMenu();
+        return TRUE;
+    }
+#endif
 
     return FALSE;
 }

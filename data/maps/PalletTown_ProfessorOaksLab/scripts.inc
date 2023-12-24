@@ -6,10 +6,14 @@
 .equ LOCALID_POKEDEX_1,       9
 .equ LOCALID_POKEDEX_2,       10
 
-.equ PLAYER_STARTER_NUM,      VAR_TEMP_1
+.equ PLAYER_STARTER_NUM,     VAR_TEMP_1
 .equ PLAYER_STARTER_SPECIES,  VAR_TEMP_2
 .equ RIVAL_STARTER_SPECIES,   VAR_TEMP_3
 .equ RIVAL_STARTER_ID,        VAR_TEMP_4
+.equ RANDOM_SPECIES_ONE_ID,        VAR_TEMP_6
+.equ RANDOM_SPECIES_TWO_ID,        VAR_TEMP_7
+.equ RANDOM_SPECIES_THREE_ID,        VAR_TEMP_8
+.equ MAX_SPECIES_NUM, NUM_SPECIES - 1
 
 .equ SHOWED_OAK_COMPLETE_DEX, FLAG_TEMP_2
 
@@ -19,7 +23,17 @@ PalletTown_ProfessorOaksLab_MapScripts::
 	map_script MAP_SCRIPT_ON_FRAME_TABLE, PalletTown_ProfessorOaksLab_OnFrame
 	.byte 0
 
+PalletTown_ProfessorOaksLab_EventScript_RandomiseStarters::
+	randomspecies 3
+	copyvar RANDOM_SPECIES_ONE_ID, VAR_RESULT
+	randomspecies 3
+	copyvar RANDOM_SPECIES_TWO_ID, VAR_RESULT
+	randomspecies 3
+	copyvar RANDOM_SPECIES_THREE_ID, VAR_RESULT
+	return
+
 PalletTown_ProfessorOaksLab_OnTransition::
+	call PalletTown_ProfessorOaksLab_EventScript_RandomiseStarters
 	setflag FLAG_VISITED_OAKS_LAB
 	call_if_eq VAR_MAP_SCENE_PALLET_TOWN_PROFESSOR_OAKS_LAB, 1, PalletTown_ProfessorOaksLab_EventScript_ReadyOakForStarterScene
 	call_if_eq VAR_MAP_SCENE_PALLET_TOWN_PROFESSOR_OAKS_LAB, 7, PalletTown_ProfessorOaksLab_EventScript_ReadyOakForNationalDexScene
@@ -584,6 +598,7 @@ PalletTown_ProfessorOaksLab_EventScript_ProfOak::
 	goto_if_ge VAR_MAP_SCENE_VIRIDIAN_CITY_MART, 1, PalletTown_ProfessorOaksLab_EventScript_ReceiveDexScene
 	goto_if_eq VAR_MAP_SCENE_PALLET_TOWN_PROFESSOR_OAKS_LAB, 4, PalletTown_ProfessorOaksLab_EventScript_OakBattleMonForItToGrow
 	goto_if_eq VAR_MAP_SCENE_PALLET_TOWN_PROFESSOR_OAKS_LAB, 3, PalletTown_ProfessorOaksLab_EventScript_OakCanReachNextTownWithMon
+	call PalletTown_ProfessorOaksLab_EventScript_RandomiseStarters
 	msgbox PalletTown_ProfessorOaksLab_Text_OakWhichOneWillYouChoose
 	release
 	end
@@ -1078,7 +1093,7 @@ PalletTown_ProfessorOaksLab_EventScript_BulbasaurBall::
 	lock
 	faceplayer
 	setvar PLAYER_STARTER_NUM, 0
-	setvar PLAYER_STARTER_SPECIES, SPECIES_BULBASAUR
+	copyvar PLAYER_STARTER_SPECIES, RANDOM_SPECIES_ONE_ID
 	setvar RIVAL_STARTER_SPECIES, SPECIES_CHARMANDER
 	setvar RIVAL_STARTER_ID, LOCALID_CHARMANDER_BALL
 	goto_if_ge VAR_MAP_SCENE_PALLET_TOWN_PROFESSOR_OAKS_LAB, 3, PalletTown_ProfessorOaksLab_EventScript_LastPokeBall
@@ -1221,7 +1236,7 @@ PalletTown_ProfessorOaksLab_EventScript_SquirtleBall::
 	lock
 	faceplayer
 	setvar PLAYER_STARTER_NUM, 1
-	setvar PLAYER_STARTER_SPECIES, SPECIES_SQUIRTLE
+	copyvar PLAYER_STARTER_SPECIES, RANDOM_SPECIES_TWO_ID
 	setvar RIVAL_STARTER_SPECIES, SPECIES_BULBASAUR
 	setvar RIVAL_STARTER_ID, LOCALID_BULBASAUR_BALL
 	goto_if_ge VAR_MAP_SCENE_PALLET_TOWN_PROFESSOR_OAKS_LAB, 3, PalletTown_ProfessorOaksLab_EventScript_LastPokeBall
@@ -1234,7 +1249,7 @@ PalletTown_ProfessorOaksLab_EventScript_CharmanderBall::
 	lock
 	faceplayer
 	setvar PLAYER_STARTER_NUM, 2
-	setvar PLAYER_STARTER_SPECIES, SPECIES_CHARMANDER
+	copyvar PLAYER_STARTER_SPECIES, RANDOM_SPECIES_THREE_ID
 	setvar RIVAL_STARTER_SPECIES, SPECIES_SQUIRTLE
 	setvar RIVAL_STARTER_ID, LOCALID_SQUIRTLE_BALL
 	goto_if_ge VAR_MAP_SCENE_PALLET_TOWN_PROFESSOR_OAKS_LAB, 3, PalletTown_ProfessorOaksLab_EventScript_LastPokeBall

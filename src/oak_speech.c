@@ -970,7 +970,7 @@ static void Task_PikachuIntro_LoadPage1(u8 taskId)
         gSprites[tTextCursorSpriteId].oam.priority = 0;
         CreatePikachuOrPlatformSprites(taskId, SPRITE_TYPE_PIKACHU);
         BeginNormalPaletteFade(PALETTES_ALL, 2, 16, 0, 0);
-        gTasks[taskId].func = Task_PikachuIntro_HandleInput;
+        gTasks[taskId].func = Task_PikachuIntro_Clear;
     }
 }
 
