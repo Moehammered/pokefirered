@@ -47,17 +47,23 @@ else
   CPP := $(PREFIX)cpp
 endif
 
+COPTLEVEL := -O2
+
+ifeq ($(DINFO),1)
+override COPTLEVEL := -O0
+endif
+
 include config.mk
 
 GCC_VER = $(shell $(CC) -dumpversion)
 
 ifeq ($(MODERN),0)
 CC1             := tools/agbcc/bin/agbcc$(EXE)
-override CFLAGS += -mthumb-interwork -Wimplicit -Wparentheses -Werror -O0 -fhex-asm
+override CFLAGS += -mthumb-interwork -Wimplicit -Wparentheses -Werror $(COPTLEVEL) -fhex-asm
 LIBPATH := -L ../../tools/agbcc/lib
 else
 CC1             := $(shell $(MODERNCC) --print-prog-name=cc1) -quiet
-override CFLAGS += -mthumb -mthumb-interwork -O0 -mcpu=arm7tdmi -mabi=apcs-gnu -fno-toplevel-reorder -fno-aggressive-loop-optimizations -Wno-pointer-to-int-cast
+override CFLAGS += -mthumb -mthumb-interwork $(COPTLEVEL) -mcpu=arm7tdmi -mabi=apcs-gnu -fno-toplevel-reorder -fno-aggressive-loop-optimizations -Wno-pointer-to-int-cast
 LIBPATH := -L $(shell dirname $(shell $(MODERNCC) --print-file-name=libgcc.a)) -L $(shell dirname $(shell $(MODERNCC) --print-file-name=libc.a))
 endif
 
