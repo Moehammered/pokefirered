@@ -331,7 +331,8 @@ struct SaveBlock2
               u16 optionsBattleSceneOff:1; // whether battle animations are disabled
               u16 regionMapZoom:1; // whether the map is zoomed in
     /*0x018*/ struct Pokedex pokedex;
-    /*0x090*/ u8 filler_90[0x8];
+              u8 gamemode;
+    /*0x090*/ u8 filler_90[0x7];
     /*0x098*/ struct Time localTimeOffset;
     /*0x0A0*/ struct Time lastBerryTreeUpdate;
     /*0x0A8*/ u32 gcnLinkFlags; // Read by Pokemon Colosseum/XD
@@ -771,7 +772,8 @@ struct SaveBlock1
     /*0x054c*/ struct ItemSlot bagPocket_Berries[BAG_BERRIES_COUNT];
     /*0x05F8*/ u8 seen1[DEX_FLAGS_NO];
     /*0x062C*/ u16 berryBlenderRecords[3]; // unused
-    /*0x0632*/ u8 unused_632[6];
+               u8 gamemode;
+    /*0x0632*/ u8 unused_632[5];
     /*0x0638*/ u16 trainerRematchStepCounter;
     /*0x063A*/ u8 ALIGNED(2) trainerRematches[MAX_REMATCH_ENTRIES];
     /*0x06A0*/ struct ObjectEvent objectEvents[OBJECT_EVENTS_COUNT];

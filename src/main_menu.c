@@ -11,7 +11,7 @@
 #include "overworld.h"
 #include "quest_log.h"
 #include "mystery_gift_menu.h"
-#include "main_menu_option.h"
+#include "main_menu_settings.h"
 #include "strings.h"
 #include "title_screen.h"
 
@@ -517,7 +517,7 @@ static void Task_ExecuteMainMenuSelection(u8 taskId)
             break;
         case MAIN_MENU_OPTION:
             // FreeAllWindowBuffers();
-            SetMainCallback2(CB2_InitMainMenuOption);
+            SetMainCallback2(CB2_InitMainMenuSettings);
             FreeAllWindowBuffers();
             DestroyTask(taskId);
             //do something here?

@@ -634,6 +634,13 @@ extern const u8 gSaveStatName_Time[];
 
 // mail
 extern const u8 gText_From[];
+extern const u8 gText_Gamemode[];
+extern const u8 gText_Vanilla[];
+extern const u8 gText_Solo[];
+extern const u8 gText_Nuzlocke[];
+extern const u8 gText_StarterMode[];
+extern const u8 gText_Random[];
+extern const u8 gText_StarterSet[];
 
 // field_specials
 extern const u8 gText_BigGuy[];
