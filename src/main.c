@@ -1,4 +1,5 @@
 #include "global.h"
+#include "gba/syscall.h"
 #include "gflib.h"
 #include "link.h"
 #include "link_rfu.h"
@@ -440,9 +441,9 @@ static void IntrDummy(void)
 static void WaitForVBlank(void)
 {
     gMain.intrCheck &= ~INTR_FLAG_VBLANK;
-
-    while (!(gMain.intrCheck & INTR_FLAG_VBLANK))
-        ;
+    VBlankIntrWait();
+    // while (!(gMain.intrCheck & INTR_FLAG_VBLANK))
+    //     ;
 }
 
 void SetVBlankCounter1Ptr(u32 *ptr)
