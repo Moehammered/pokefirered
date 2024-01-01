@@ -30,6 +30,8 @@
 #include "pokemon_jump.h"
 #include "event_scripts.h"
 
+#define ENABLE_NATIONALDEX_FROM_START
+
 // this file's functions
 static void ResetMiniGamesResults(void);
 
@@ -130,7 +132,11 @@ void NewGameInitData(void)
     ClearPlayerLinkBattleRecords();
     InitHeracrossSizeRecord();
     InitMagikarpSizeRecord();
+#ifdef ENABLE_NATIONALDEX_FROM_START
+    EnableNationalPokedex();
+#else
     EnableNationalPokedex_RSE();
+#endif
     gPlayerPartyCount = 0;
     ZeroPlayerPartyMons();
     ResetPokemonStorageSystem();

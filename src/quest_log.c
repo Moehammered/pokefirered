@@ -459,7 +459,6 @@ void TryStartQuestLogPlayback(u8 taskId)
 
     if (sNumScenes != 0)
     {
-        //gHelpSystemEnabled = FALSE;
         Task_BeginQuestLogPlayback(taskId);
         DestroyTask(taskId);
     }
@@ -1229,7 +1228,6 @@ static void Task_EndQuestLog(u8 taskId)
         gTextFlags.autoScroll = FALSE;
         gGlobalFieldTintMode = QL_TINT_NONE;
         DisableWildEncounters(FALSE);
-        //gHelpSystemEnabled = TRUE;
         DestroyTask(taskId);
         break;
     }

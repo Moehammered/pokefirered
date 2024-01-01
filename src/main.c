@@ -140,7 +140,6 @@ void AgbMain()
     SetDefaultFontsPointer();
 
     gSoftResetDisabled = FALSE;
-    //gHelpSystemEnabled = FALSE;
 
     SetNotInSaveFailedScreen();
 

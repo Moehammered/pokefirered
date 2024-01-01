@@ -1798,7 +1798,6 @@ static bool8 DoTradeAnim_Cable(void)
             }
             SetMainCallback2(CB2_ReturnToField);
             BufferInGameTradeMonName();
-            //HelpSystem_Enable();
         }
         break;
     }
@@ -2298,7 +2297,6 @@ static bool8 DoTradeAnim_Wireless(void)
             }
             SetMainCallback2(CB2_ReturnToField);
             BufferInGameTradeMonName();
-            //HelpSystem_Enable();
         }
         break;
     }
@@ -2742,7 +2740,6 @@ void DoInGameTradeScene(void)
     LockPlayerFieldControls();
     CreateTask(Task_InGameTrade, 10);
     BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_BLACK);
-    //HelpSystem_Disable();
 }
 
 static void Task_InGameTrade(u8 taskId)

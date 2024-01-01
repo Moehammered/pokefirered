@@ -1595,7 +1595,6 @@ static void Task_MysteryGift(u8 taskId)
         break;
     case MG_STATE_EXIT:
         CloseLink();
-        //HelpSystem_Enable();
         Free(data->clientMsg);
         DestroyTask(taskId);
         SetMainCallback2(MainCB_FreeAllBuffersAndReturnToInitTitleScreen);
