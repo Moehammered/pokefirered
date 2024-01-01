@@ -446,4 +446,7 @@ gSpecials::
 	def_special UpdateLoreleiDollCollection
 	def_special LoopWingFlapSound
 	def_special CreateEnemyEventMon
+	def_special GetStarterMode
+	def_special GetGamemode
+	def_special GetNationalFromStart
 gSpecialsEnd::

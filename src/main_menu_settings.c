@@ -20,19 +20,17 @@
 
 #define array_size(arr) sizeof(arr)/sizeof(arr[0])
 
-void AddTextPrinterToWindow_MainMenuSettings(const u8 *str);
-void MainCB_MainMenuSettings_ReturnToTitleScreen(void);
-void PrintMainMenuSettingsTopMenu(void);
 void CB2_InitMainMenuSettings(void);
 void CB2_RunMainMenuSettings(void);
 static void Task_MainMenuSettingsMenu(u8 taskId);
-void MainMenuSettings_DrawTextBorder(u8 windowId);
 static void InitMainMenuSettingsMenuBg(void);
 static void Task_MainMenuSettingsInit(u8 taskId);
 
 enum
 {
     MAINMENU_SETTINGS_GAMEMODE = 0,
+    MAINMENU_SETTINGS_STARTER,
+    MAINMENU_SETTINGS_NATIONAL,
     MAINMENU_SETTINGS_OK,
     MAINMENU_SETTINGS_COUNT
 };
@@ -135,51 +133,25 @@ static const u8 *const sTextGamemodeOptions[Gamemode_Count] = {
     [Gamemode_Solo_Option] = gText_Solo
 };
 
+static const u8* const sTextStarterOptions[2] = { gText_Vanilla, gText_Random };
+
+static const u8* const sTextYesNoOptions[2] = { gText_No, gText_Yes };
+
 static const u16 sMainMenuSettingsMenuPalette[] = INCBIN_U16("graphics/misc/option_menu.gbapal");
-static const u16 sMainMenuSettingsMenuItemCounts[MAINMENU_SETTINGS_COUNT] = {array_size(sTextGamemodeOptions), 1};
+static const u16 sMainMenuSettingsMenuItemCounts[MAINMENU_SETTINGS_COUNT] = {
+    [MAINMENU_SETTINGS_GAMEMODE] = array_size(sTextGamemodeOptions), 
+    [MAINMENU_SETTINGS_STARTER] = array_size(sTextStarterOptions),
+    [MAINMENU_SETTINGS_NATIONAL] = array_size(sTextYesNoOptions), 
+    1
+};
 
 static const u8 *const sMainMenuSettingsMenuItemsNames[MAINMENU_SETTINGS_COUNT] =
 {
     [MAINMENU_SETTINGS_GAMEMODE] = gText_Gamemode,
-    // [MAINMENUOPTIONITEM_TEXTSPEED]   = gText_TextSpeed,
-    // [MAINMENUOPTIONITEM_BATTLESCENE] = gText_BattleScene,
-    // [MAINMENUOPTIONITEM_BATTLESTYLE] = gText_BattleStyle,
-    // [MAINMENUOPTIONITEM_SOUND]       = gText_Sound,
-    // [MAINMENUOPTIONITEM_BUTTONMODE]  = gText_ButtonMode,
-    // [MAINMENUOPTIONITEM_FRAMETYPE]   = gText_Frame,
+    [MAINMENU_SETTINGS_STARTER] = gText_StarterMode,
+    [MAINMENU_SETTINGS_NATIONAL] = gText_National,
     [MAINMENU_SETTINGS_OK]      = gText_Ok,
 };
-
-// static const u8 *const sTextSpeedOptions[] =
-// {
-//     gText_TextSpeedSlow, 
-//     gText_TextSpeedMid, 
-//     gText_TextSpeedFast
-// };
-
-// static const u8 *const sBattleSceneOptions[] =
-// {
-//     gText_BattleSceneOn, 
-//     gText_BattleSceneOff
-// };
-
-// static const u8 *const sBattleStyleOptions[] =
-// {
-//     gText_BattleStyleShift,
-//     gText_BattleStyleSet
-// };
-
-// static const u8 *const sSoundOptions[] =
-// {
-//     gText_SoundMono, 
-//     gText_SoundStereo
-// };
-
-// static const u8 *const sButtonTypeOptions[] =
-// {
-// 	gText_ButtonTypeLR,
-// 	gText_ButtonTypeLEqualsA
-// };
 
 static const u8 sMainMenuOptionMenuPickSwitchCancelTextColor[] = {TEXT_DYNAMIC_COLOR_6, TEXT_COLOR_WHITE, TEXT_COLOR_DARK_GRAY};
 static const u8 sMainMenuOptionMenuTextColor[] = {TEXT_COLOR_TRANSPARENT, TEXT_COLOR_LIGHT_RED, TEXT_COLOR_RED};
@@ -189,37 +161,7 @@ void CreateMainMenuOptionTask()
 {
     u32 taskId = CreateTask(Task_MainMenuSettingsInit, 0);
     //Task.Data is s16  * 16 = s32 * 8 = 4 bytes * 8 = 32 bytes
-    struct MainMenuSettingsMenu * data = (void *)gTasks[taskId].data;
-    memset(data, 0, sizeof(struct MainMenuSettingsMenu));
-    sMainMenuSettingsMenuPtr = data;
-    sMainMenuSettingsMenuPtr->option[MAINMENU_SETTINGS_GAMEMODE] = min(max(gSaveBlock1Ptr->gamemode, 0), Gamemode_Count-1);
-    // data->state = MG_STATE_TO_MAIN_MENU;
-    // data->textState = 0;
-    // data->unused4 = 0;
-    // data->unused5 = 0;
-    // data->isWonderNews = FALSE;
-    // data->sourceIsFriend = FALSE;
-    // data->var = 0;
-    // data->unused1 = 0;
-    // data->unused2 = 0;
-    // data->unused3 = 0;
-    // data->msgId = 0;
-    // data->clientMsg = AllocZeroed(CLIENT_MAX_MSG_SIZE);
-}
-
-void AddTextPrinterToWindow_MainMenuSettings(const u8 *str)
-{
-
-}
-
-void MainCB_MainMenuSettings_ReturnToTitleScreen(void)
-{
-
-}
-
-void PrintMainMenuSettingsTopMenu(void)
-{
-
+    memset(gTasks[taskId].data, 0, array_size(gTasks[taskId].data));
 }
 
 void CB2_MainMenuOption_InitTaskSystem(void)
@@ -241,17 +183,13 @@ void CB2_RunMainMenuSettings(void)
 {
     //init default menu or load existing
     u32 taskId = CreateTask(Task_MainMenuSettingsMenu, 0);
+    memset(gTasks[taskId].data, 0, array_size(gTasks[taskId].data));
     struct MainMenuSettingsMenu * data = (void *)gTasks[taskId].data;
-    memset(data, 0, sizeof(struct MainMenuSettingsMenu));
     sMainMenuSettingsMenuPtr = data;
-    sMainMenuSettingsMenuPtr->option[MAINMENU_SETTINGS_GAMEMODE] = min(max(gSaveBlock1Ptr->gamemode, 0), Gamemode_Count-1);
-    // CreateMainMenuOptionTask(); //kick off the main task to run here
-    // SetMainCallback2(CB2_MainMenuOption_InitTaskSystem); //set callback to setup task system
-}
-
-void MainMenuSettings_DrawTextBorder(u8 windowId)
-{
-
+    sMainMenuSettingsMenuPtr->cursorPos = 0;
+    sMainMenuSettingsMenuPtr->option[MAINMENU_SETTINGS_GAMEMODE] = min(max(gSaveBlock1Ptr->settings.gamemode, 0), Gamemode_Count-1);
+    sMainMenuSettingsMenuPtr->option[MAINMENU_SETTINGS_STARTER] = gSaveBlock1Ptr->settings.starterSetting == 1;
+    sMainMenuSettingsMenuPtr->option[MAINMENU_SETTINGS_NATIONAL] = gSaveBlock1Ptr->settings.nationalDexFromStart == 1;
 }
 
 static void VBlankCB_MainMenuOptionMenu(void)
@@ -311,7 +249,7 @@ static u8 MainMenuOptionMenu_ProcessInput(void)
     }
 }
 
-static void BufferMainMenuOptionMenuString(u8 selection)
+static void BufferMainMenuOptionMenuString(u32 selection, u32 option)
 {
     u8 str[20];
     u8 buf[12];
@@ -323,26 +261,19 @@ static void BufferMainMenuOptionMenuString(u8 selection)
     y = ((GetFontAttribute(FONT_NORMAL, FONTATTR_MAX_LETTER_HEIGHT) - 1) * selection) + 2;
     FillWindowPixelRect(1, 1, x, y, 0x46, GetFontAttribute(FONT_NORMAL, FONTATTR_MAX_LETTER_HEIGHT));
 
+    // u16 const option = sMainMenuSettingsMenuPtr->option[selection];
+
     switch (selection)
     {
     case MAINMENU_SETTINGS_GAMEMODE:
-        AddTextPrinterParameterized3(1, FONT_NORMAL, x, y, dst, -1, sTextGamemodeOptions[sMainMenuSettingsMenuPtr->option[selection]]);
+        AddTextPrinterParameterized3(1, FONT_NORMAL, x, y, dst, -1, sTextGamemodeOptions[option]);
         break;
-    // case MAINMENUOPTIONITEM_TEXTSPEED:
-    //     AddTextPrinterParameterized3(1, FONT_NORMAL, x, y, dst, -1, sTextSpeedOptions[sMainMenuSettingsMenuPtr->option[selection]]);
-    //     break;
-    // case MAINMENUOPTIONITEM_BATTLESCENE:
-    //     AddTextPrinterParameterized3(1, FONT_NORMAL, x, y, dst, -1, sBattleSceneOptions[sMainMenuSettingsMenuPtr->option[selection]]);
-    //     break;
-    // case MAINMENUOPTIONITEM_BATTLESTYLE:
-    //     AddTextPrinterParameterized3(1, FONT_NORMAL, x, y, dst, -1, sBattleStyleOptions[sMainMenuSettingsMenuPtr->option[selection]]);
-    //     break;
-    // case MAINMENUOPTIONITEM_SOUND:
-    //     AddTextPrinterParameterized3(1, FONT_NORMAL, x, y, dst, -1, sSoundOptions[sMainMenuSettingsMenuPtr->option[selection]]);
-    //     break;
-    // case MAINMENUOPTIONITEM_BUTTONMODE:
-    //     AddTextPrinterParameterized3(1, FONT_NORMAL, x, y, dst, -1, sButtonTypeOptions[sMainMenuSettingsMenuPtr->option[selection]]);
-    //     break;
+    case MAINMENU_SETTINGS_STARTER:
+        AddTextPrinterParameterized3(1, FONT_NORMAL, x, y, dst, -1, sTextStarterOptions[option]);
+        break;
+    case MAINMENU_SETTINGS_NATIONAL:
+        AddTextPrinterParameterized3(1, FONT_NORMAL, x, y, dst, -1, sTextYesNoOptions[option]);
+        break;
     // case MAINMENUOPTIONITEM_FRAMETYPE:
     //     StringCopy(str, gText_FrameType);
     //     ConvertIntToDecimalStringN(buf, sMainMenuSettingsMenuPtr->option[selection] + 1, 1, 2);
@@ -370,7 +301,9 @@ static void CloseAndSaveOptionMenu(u8 taskId)
 {
     // SetMainCallback2(gMain.savedCallback);
     FreeAllWindowBuffers();
-    gSaveBlock1Ptr->gamemode = sMainMenuSettingsMenuPtr->option[MAINMENU_SETTINGS_GAMEMODE];
+    gSaveBlock1Ptr->settings.gamemode = sMainMenuSettingsMenuPtr->option[MAINMENU_SETTINGS_GAMEMODE];
+    gSaveBlock1Ptr->settings.starterSetting = sMainMenuSettingsMenuPtr->option[MAINMENU_SETTINGS_STARTER];
+    gSaveBlock1Ptr->settings.nationalDexFromStart = sMainMenuSettingsMenuPtr->option[MAINMENU_SETTINGS_NATIONAL];
     TrySavingData(SAVE_LINK);
     // gSaveBlock2Ptr->optionsTextSpeed = sOptionMenuPtr->option[MENUITEM_TEXTSPEED];
     // gSaveBlock2Ptr->optionsBattleSceneOff = sOptionMenuPtr->option[MENUITEM_BATTLESCENE];
@@ -396,6 +329,17 @@ static void Task_MainMenuSettingsMenu(u8 taskId)
     case 1:
         if (gPaletteFade.active)
             return;
+        {
+            u32 selection, option;
+            selection = 0;
+            for (selection = 0; selection < MAINMENU_SETTINGS_COUNT; ++selection)
+            {
+                option = sMainMenuSettingsMenuPtr->option[selection];
+                BufferMainMenuOptionMenuString(selection, option);
+            }
+        }
+        // BufferMainMenuOptionMenuString(sMainMenuSettingsMenuPtr->cursorPos);
+        // UpdateMainMenuOptionSettingSelectionDisplay(sMainMenuSettingsMenuPtr->cursorPos);
         sMainMenuSettingsMenuPtr->loadState++;
         break;
     case 2:
@@ -406,17 +350,17 @@ static void Task_MainMenuSettingsMenu(u8 taskId)
         case 1:
             sMainMenuSettingsMenuPtr->loadState++;
             break;
-        case 2:
-            // LoadBgTiles(1, GetUserWindowGraphics(sMainMenuSettingsMenuPtr->option[MAINMENUOPTIONITEM_FRAMETYPE])->tiles, 0x120, 0x1AA);
-            // LoadPalette(GetUserWindowGraphics(sMainMenuSettingsMenuPtr->option[MAINMENUOPTIONITEM_FRAMETYPE])->palette, BG_PLTT_ID(2), PLTT_SIZE_4BPP);
-            // BufferMainMenuOptionMenuString(sMainMenuSettingsMenuPtr->cursorPos);
-            break;
         case 3:
             UpdateMainMenuOptionSettingSelectionDisplay(sMainMenuSettingsMenuPtr->cursorPos);
             break;
         case 4:
-            BufferMainMenuOptionMenuString(sMainMenuSettingsMenuPtr->cursorPos);
+        {
+            u32 selection, option;
+            selection = sMainMenuSettingsMenuPtr->cursorPos;
+            option = sMainMenuSettingsMenuPtr->option[selection];
+            BufferMainMenuOptionMenuString(selection, option);
             break;
+        }
         }
         break;
     case 3:
@@ -472,9 +416,10 @@ static void MainMenuOptionMenu_ResetSpriteData(void)
     ScanlineEffect_Stop();
 }
 
-static bool8 LoadMainMenuOptionMenuPalette(void)
+static bool8 LoadMainMenuOptionMenuPalette(u32* const paletteState)
 {
-    switch (sMainMenuSettingsMenuPtr->loadPaletteState)
+    u32 const state = *paletteState;
+    switch (state)
     {
     case 0:
         LoadBgTiles(1, GetUserWindowGraphics(gSaveBlock2Ptr->optionsWindowFrameType)->tiles, 0x120, 0x1AA);
@@ -492,7 +437,7 @@ static bool8 LoadMainMenuOptionMenuPalette(void)
     default:
         return TRUE;
     }
-    sMainMenuSettingsMenuPtr->loadPaletteState++;
+    *paletteState = state+1;
     return FALSE;
 }
 
@@ -553,9 +498,9 @@ static void MainMenuOptionMenu_PickSwitchCancel(void)
 
 static void Task_MainMenuSettingsInit(u8 taskId)
 {
-    u8 i, state;
-    state = sMainMenuSettingsMenuPtr->state;
-    switch (state)
+    u32* const paletteState = (u32*)gTasks[taskId].data;
+    u32* const initState = paletteState+1;
+    switch (*initState)
     {
     case 0: //init screen blank callbacks
         SetVBlankCallback(NULL);
@@ -568,7 +513,7 @@ static void Task_MainMenuSettingsInit(u8 taskId)
         MainMenuOptionMenu_ResetSpriteData();
         break;
     case 3:
-        if (LoadMainMenuOptionMenuPalette() != TRUE)
+        if (LoadMainMenuOptionMenuPalette(paletteState) != TRUE)
             return;
         break;
     case 4:
@@ -581,19 +526,22 @@ static void Task_MainMenuSettingsInit(u8 taskId)
         LoadMainMenuOptionMenuItemNames();
         break;
     case 7:
-        for (i = 0; i < MAINMENU_SETTINGS_COUNT; i++)
-            BufferMainMenuOptionMenuString(i);
-        break;
+    {
+        u32 i;
+        for (i = 0; i < MAINMENU_SETTINGS_COUNT; ++i)
+            BufferMainMenuOptionMenuString(i, 0);
+    }
+    break;
     case 8:
-        UpdateMainMenuOptionSettingSelectionDisplay(sMainMenuSettingsMenuPtr->cursorPos);
+        UpdateMainMenuOptionSettingSelectionDisplay(0);
         break;
     case 9:
         MainMenuOptionMenu_PickSwitchCancel();
         break;
     default:
-        DestroyTask(taskId);
         CB2_RunMainMenuSettings();
-		break;
+        DestroyTask(taskId);
+		return;
     }
-    sMainMenuSettingsMenuPtr->state++;
+    *initState = *initState+1;
 }

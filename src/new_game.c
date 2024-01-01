@@ -30,8 +30,6 @@
 #include "pokemon_jump.h"
 #include "event_scripts.h"
 
-#define ENABLE_NATIONALDEX_FROM_START
-
 // this file's functions
 static void ResetMiniGamesResults(void);
 
@@ -116,12 +114,15 @@ void NewGameInitData(void)
     ZeroPlayerPartyMons();
     ZeroEnemyPartyMons();
     ClearBattleTower();
+    //backup settings data so they can persist through new games
+    struct GameSettings const oldSettings = gSaveBlock1Ptr->settings;
     ClearSav1();
     ClearMailData();
     gSaveBlock2Ptr->specialSaveWarpFlags = 0;
     gSaveBlock2Ptr->gcnLinkFlags = 0;
     gSaveBlock2Ptr->unkFlag1 = TRUE;
     gSaveBlock2Ptr->unkFlag2 = FALSE;
+    gSaveBlock1Ptr->settings = oldSettings;
     InitPlayerTrainerId();
     PlayTimeCounter_Reset();
     ClearPokedexFlags();
@@ -132,11 +133,10 @@ void NewGameInitData(void)
     ClearPlayerLinkBattleRecords();
     InitHeracrossSizeRecord();
     InitMagikarpSizeRecord();
-#ifdef ENABLE_NATIONALDEX_FROM_START
-    EnableNationalPokedex();
-#else
-    EnableNationalPokedex_RSE();
-#endif
+    if (gSaveBlock1Ptr->settings.nationalDexFromStart)
+        EnableNationalPokedex();
+    else
+        EnableNationalPokedex_RSE();
     gPlayerPartyCount = 0;
     ZeroPlayerPartyMons();
     ResetPokemonStorageSystem();
